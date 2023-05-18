@@ -1,31 +1,14 @@
 # nosql-challenge
 
-## Instructions
-
-The UK Food Standards Agency evaluates various establishments across the United Kingdom, and gives them a food hygiene rating. You've been contracted by the editors of a food magazine, Eat Safe, Love, to evaluate some of the ratings data in order to help their journalists and food critics decide where to focus future articles.
+The UK Food Standards Agency evaluates various establishments across the United Kingdom, and gives them a food hygiene rating. In this exercise, we perform CRUD operations on the UK Food database. 
 
 ## Part 1: Database and Jupyter Notebook Set Up
-Use NoSQL_setup_starter.ipynb for this section of the challenge.
+First, in our Terminal, we import data from the establishments.json file into MongoDB. We name the database 'uk_food' and the collection 'establishments'.
 
-Import the data provided in the establishments.json file from your Terminal. Name the database uk_food and the collection establishments. Copy the text you used to import your data from your Terminal to a markdown cell in your notebook.
-
-Within your notebook, import the libraries you need: PyMongo and Pretty Print (pprint).
-
-Create an instance of the Mongo Client.
-
-Confirm that you created the database and loaded the data properly:
-
-List the databases you have in MongoDB. Confirm that uk_food is listed.
-List the collection(s) in the database to ensure that establishments is there.
-Find and display one document in the establishments collection using find_one and display with pprint.
-Assign the establishments collection to a variable to prepare the collection for use.
+In Jupyter Notebook (NoSQL_setup_starter.ipynb), we import PyMongo so that we can work with the database in Python. After importing PyMongo, we create an instance of the Mongo Client and confirm that the client has connected to the database and loaded the data properly. Then we assign the establishments collection to a variable.
 
 ## Part 2: Update the Database
-Use NoSQL_setup_starter.ipynb for this section of the challenge.
-
-The magazine editors have some requested modifications for the database before you can perform any queries or analysis for them. Make the following changes to the establishments collection:
-
-An exciting new halal restaurant just opened in Greenwich, but hasn't been rated yet. The magazine has asked you to include it in your analysis. Add the following information to the database:
+In this section, we add a restaurant to the database. Initially, we have the following information for the restaurant:
 
 {
     "BusinessName":"Penang Flavours",
@@ -56,41 +39,21 @@ An exciting new halal restaurant just opened in Greenwich, but hasn't been rated
     "NewRatingPending":True
 }
 
-Find the BusinessTypeID for "Restaurant/Cafe/Canteen" and return only the BusinessTypeID and BusinessType fields.
+We fill in the restaurant's BusinessTypeID by finding another establishment with a BusinessType of "Restaurant/Cafe/Canteen" and returning the corresponding BusinessTypeID. One we know the appropriate BusinessTypeID, we update the new restaurant's information.
 
-Update the new restaurant with the BusinessTypeID you found.
+Next, we eliminate any establishments located in Dover, an area we are not interested in. After removing these establishments, we call collection.count_documents() to verify that they were deleted.
 
-The magazine is not interested in any establishments in Dover, so check how many documents contain the Dover Local Authority. Then, remove any establishments within the Dover Local Authority from the database, and check the number of documents to ensure they were deleted.
-
-Some of the number values are stored as strings, when they should be stored as numbers.
-
-Use update_many to convert latitude and longitude to decimal numbers.
-Use update_many to convert RatingValue to integer numbers.
+Lastly, we use collections.update_many() convert certain values from strings to numbers. Specifically, we convert latitude and longitude to decimal numbers, and RatingValue to integer numbers.
 
 ## Part 3: Exploratory Analysis
-Eat Safe, Love has specific questions they want you to answer, which will help them find the locations they wish to visit and avoid.
+In NoSQL_analysis_starter.ipynb, we explore the database that we set up in the previous section. 
 
-Use NoSQL_analysis_starter.ipynb for this section of the challenge.
+First, we determine which establishments have a hygiene score equal to 20.
 
-Some notes to be aware of while you are exploring the dataset:
+Next, we find the establishments in London that have a RatingValue greater than or equal to 4.
 
-RatingValue refers to the overall rating decided by the Food Authority and ranges from 1-5. The higher the value, the better the rating.
-Note: This field also includes non-numeric values such as 'Pass', where 'Pass' means that the establishment passed their inspection but isn't given a number rating. We will coerce non-numeric values to nulls during the database setup before converting ratings to integers.
-The scores for Hygiene, Structural, and ConfidenceInManagement work in reverse. This means, the higher the value, the worse the establishment is in these areas.
-Use the following questions to explore the database, and find the answers, so you can provide them to the magazine editors.
+Next, we find the top 5 establishments with a RatingValue of 5, sorted by lowest hygiene score (a lower hygiene score is better), nearest to the new restaurant added, "Penang Flavours".
 
-Unless otherwise stated, for each question:
+Lastly, we find the number of establishments in each Local Authority area that have the best possible hygiene score (i.e., 0). We sort the results from highest to lowest, and print out the top ten local authority areas, as shown below:
 
-Use count_documents to display the number of documents contained in the result.
-
-Display the first document in the results using pprint.
-
-Convert the result to a Pandas DataFrame, print the number of rows in the DataFrame, and display the first 10 rows.
-
-Which establishments have a hygiene score equal to 20?
-
-Which establishments in London have a RatingValue greater than or equal to 4?
-
-What are the top 5 establishments with a RatingValue of 5, sorted by lowest hygiene score, nearest to the new restaurant added, "Penang Flavours"?
-
-How many establishments in each Local Authority area have a hygiene score of 0? Sort the results from highest to lowest, and print out the top ten local authority areas.
+![image](https://github.com/Rob-Cortes/nosql-challenge/assets/124944383/2e474e86-44f6-4646-b25c-47d239bcdf1a)
