@@ -1,4 +1,4 @@
-# nosql-challenge
+# No-SQL Investigation of UK Food Standards
 
 The UK Food Standards Agency evaluates various establishments across the United Kingdom, and gives them a food hygiene rating. In this exercise, we perform CRUD operations on the UK Food database. 
 
